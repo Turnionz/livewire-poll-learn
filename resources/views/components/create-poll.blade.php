@@ -15,7 +15,8 @@ new class extends Component
     ];
 
     protected $messages = [
-        'options.*' => "The option can't be empty"
+        'options.min' => 'You need to have at least 2 options',
+        'options.*.required' => "The option can't be empty"
     ];
 
     public function addOption()
@@ -47,6 +48,8 @@ new class extends Component
         );
 
         $this->reset(['title', 'options']);
+
+        $this->dispatch('pollCreated');
     }
 };
 ?>
@@ -65,6 +68,9 @@ new class extends Component
         </div>
 
         <div>
+            @error("options")
+                <div class="text-red-500">{{ $message }}</div>
+            @enderror
             @foreach ($options as $index => $option)
                 <div class="mb-4">
                     <label>Option {{ $index + 1 }}</label>
